@@ -2,6 +2,10 @@
 
 Some of the guidelines will have technical reasons, others will be purely about ensuring consistency. The reasons will be explained where possible. All rules may be broken in certain circumstances, but doing so should be justified by a code comment and/or in the pull request.
 
+This document doesn't cover purely preferential things that are already enforced by tooling (e.g tabs vs spaces).
+
+---
+
 ## Formatting and Syntax
 
 ### Naming
@@ -16,7 +20,7 @@ propertyNamesLikeThis
 SYMBOLIC_CONSTANTS_LIKE_THIS
 ```
 
-ℹ️**Why:** Consistency.
+ℹ️ **Why:** Consistency.
 
 ### File names
 
@@ -25,7 +29,7 @@ If a module has a default export, eg a React Component, the file name should be 
 ```javascript
 // MyComponent.js
 
-import React from "react";
+import React from 'react';
 
 export default function MyComponent(props) {
   // do stuff
@@ -39,7 +43,7 @@ export function doFoo() {}
 export function doBar() {}
 ```
 
-ℹ️**Why:** Consistency, primarily. But additionally, unexpected casing can cause issues in different environments, eg `button.js` and `Button.js` are the same on MacOS, but different on other systems.
+ℹ️ **Why:** Consistency, primarily. But additionally, unexpected casing can cause issues in different environments, eg `button.js` and `Button.js` are the same on MacOS, but different on other systems.
 
 ### Indentation and other formatting
 
@@ -47,7 +51,7 @@ Rather than enumerating each formatting preference like indentation, we've opted
 
 Each project should have configuration for both of these tools, and your editor should be configured to use them. CI should be configured to fail on incorrectly formatted code (if there's a legitimate reason to break formatting, you can disable the lint rule on a per-line basis).
 
-**Why:** Consistency. There are very few technical reasons to favour one formatting convention over another, but there's value in picking one and sticking with it.
+ℹ️ **Why:** Consistency. There are very few technical reasons to favour one formatting convention over another, but there's value in picking one and sticking with it.
 
 ### Imports
 
@@ -63,13 +67,13 @@ We have a loose convention for ordering of imports, each group is usually separa
 
 Imports within each group should be sorted alphabetically.
 
-ℹ️**Why:** Consistency, and ease of understanding.
+ℹ️ **Why:** Consistency, and ease of understanding.
 
 ### Do _not_ sort imports automatically
 
 Whilst it's fine to have a command you run manually to order imports (according to conventions) within a single module, it **shouldn't** be configured to run automatically (e.g. on save).
 
-**Why:** Importing a module causes it to be executed, it's possible for this to include side effects. In some circumstances it can be necessary to carefully sort imports so that the code functions as expected. Automatically sorting imports can cause code to break.
+ℹ️ **Why:** Importing a module causes it to be executed, it's possible for this to include side effects. In some circumstances it can be necessary to carefully sort imports so that the code functions as expected. Automatically sorting imports can cause code to break.
 
 ### Linting
 
@@ -81,37 +85,41 @@ Some linting violations are able to be fixed automatically, but these should be 
 
 If a linting rule seems incorrect or excessively draconian, there should be a discussion about removing it.
 
-ℹ️**Why:** Linting protects us from bugs and other forms of codebase deterioration. A pull request containing linting violations creates extra work for the reviewers.
+ℹ️ **Why:** Linting protects us from bugs and other forms of codebase deterioration. A pull request containing linting violations creates extra work for the reviewers.
+
+---
 
 ## Best practices, patterns and anti-patterns
 
-We don't have linting and formatting rules for everything, so let's dive into some specifics.
+We don't have linting and formatting rules for everything, so let's
+dive into some specifics.
 
 ### Ternaries
 
+✅ **Do:** Use ternaries for simple boolean expressions.
+
+_Evaluates to 'green' if selected is truthy, 'orange' otherwise_
+
 ```javascript
-/*
-Evaluates to 'green' if selected is truthy, 'orange' otherwise
-*/
-selected ? "green" : "orange";
+selected ? 'green' : 'orange';
 ```
 
 It's possible to build up more elaborate ternaries by nesting them, try not to go beyond one level of nesting because it can become quite hard to understand them.
 
-✅**Do:**
+✅ **Do:** Use at most one level of ternary nesting,
+
+This example is a borderline one, it's already possible to argue that it's hard to understand.
+
+_Evaluates to 'grey' if disabled is truthy, falling back to 'green' if selected is truthy, 'orange' otherwise._
 
 ```javascript
-/* 
-Evaluates to 'grey' if disabled is truthy, falling back to 'green' if selected is truthy, 'orange' otherwise
-*/
-disabled ? "grey" : selected ? "green" : "orange";
+disabled ? 'grey' : selected ? 'green' : 'orange';
 ```
 
-❌**Don't:**
+❌ **Don't:** Use ternary nesting if it compromises readability
+
+_This is too much._
 
 ```javascript
-/* 
-This is too much
-*/
-disabled ? "grey" : selected ? "green" : focused ? "blue" : "orange";
+disabled ? 'grey' : selected ? 'green' : focused ? 'blue' : 'orange';
 ```
