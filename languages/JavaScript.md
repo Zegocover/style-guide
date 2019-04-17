@@ -2,7 +2,7 @@
 
 Some of the guidelines will have technical reasons, others will be purely about ensuring consistency. The reasons will be explained where possible. All rules may be broken in certain circumstances, but doing so should be justified by a code comment and/or in the pull request.
 
-## Syntax
+## Formatting and Syntax
 
 ### Naming
 
@@ -16,7 +16,7 @@ propertyNamesLikeThis
 SYMBOLIC_CONSTANTS_LIKE_THIS
 ```
 
-**Why:** Consistency.
+ℹ️**Why:** Consistency.
 
 ### File names
 
@@ -39,7 +39,7 @@ export function doFoo() {}
 export function doBar() {}
 ```
 
-**Why:** Consistency, primarily. But additionally, unexpected casing can cause issues in different environments, eg `button.js` and `Button.js` are the same on OS, but different on other systems.
+ℹ️**Why:** Consistency, primarily. But additionally, unexpected casing can cause issues in different environments, eg `button.js` and `Button.js` are the same on MacOS, but different on other systems.
 
 ### Indentation and other formatting
 
@@ -63,7 +63,7 @@ We have a loose convention for ordering of imports, each group is usually separa
 
 Imports within each group should be sorted alphabetically.
 
-**Why:** Consistency, and ease of understanding.
+ℹ️**Why:** Consistency, and ease of understanding.
 
 ### Do _not_ sort imports automatically
 
@@ -81,4 +81,37 @@ Some linting violations are able to be fixed automatically, but these should be 
 
 If a linting rule seems incorrect or excessively draconian, there should be a discussion about removing it.
 
-**Why:** Linting protects us from bugs and other forms of codebase deterioration. A pull request containing linting violations creates extra work for the reviewers.
+ℹ️**Why:** Linting protects us from bugs and other forms of codebase deterioration. A pull request containing linting violations creates extra work for the reviewers.
+
+## Best practices, patterns and anti-patterns
+
+We don't have linting and formatting rules for everything, so let's dive into some specifics.
+
+### Ternaries
+
+```javascript
+/*
+Evaluates to 'green' if selected is truthy, 'orange' otherwise
+*/
+selected ? "green" : "orange";
+```
+
+It's possible to build up more elaborate ternaries by nesting them, try not to go beyond one level of nesting because it can become quite hard to understand them.
+
+✅**Do:**
+
+```javascript
+/* 
+Evaluates to 'grey' if disabled is truthy, falling back to 'green' if selected is truthy, 'orange' otherwise
+*/
+disabled ? "grey" : selected ? "green" : "orange";
+```
+
+❌**Don't:**
+
+```javascript
+/* 
+This is too much
+*/
+disabled ? "grey" : selected ? "green" : focused ? "blue" : "orange";
+```
