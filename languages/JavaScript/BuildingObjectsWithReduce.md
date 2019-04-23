@@ -15,6 +15,7 @@ const result = Object.keys(input).reduce((acc, key) => {
 It's possible to use newer syntax to implement this without object mutation:
 
 ```javascript
+// Don't do this!
 const result = Object.keys(input).reduce(
   (acc, key) => ({
     ...acc,
