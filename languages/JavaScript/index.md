@@ -108,7 +108,7 @@ It's possible to build up more elaborate ternaries by nesting them, try not to g
 
 ✅ **Do:** Use at most one level of ternary nesting,
 
-This example is a borderline one, it's already possible to argue that it's hard to understand.
+This example is a borderline one, it's already getting hard to understand.
 
 _Evaluates to 'grey' if disabled is truthy, falling back to 'green' if selected is truthy, 'orange' otherwise._
 

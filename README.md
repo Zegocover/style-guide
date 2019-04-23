@@ -1,3 +1,3 @@
 # Zego Coding Style Guide
 
-- [JavaScript](/languages/JavaScript.md)
+- [JavaScript](/languages/JavaScript/index.md)
