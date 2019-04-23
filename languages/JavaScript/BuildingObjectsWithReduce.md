@@ -26,4 +26,4 @@ const result = Object.keys(input).reduce(
 
 The problem is that every iteration of the loop is creating a new object, which is slower than mutating the accumulator. In this case, there we don't get any value from pursuing functional purity because the scope of the accumulator is tightly controlled.
 
-❌ **Don't:** Use unnecessarily create temporary objects inside loops, such as when using `Array.reduce`.
+❌ **Don't:** Unnecessarily create temporary objects inside loops, such as when using `Array.reduce`.
