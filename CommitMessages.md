@@ -1,5 +1,5 @@
 Our commit message guidelines match those you'll find in the [git book](https://www.git-scm.com/book/en/v2/Distributed-Git-Contributing-to-a-Project)
-and (other great articles)[https://chris.beams.io/posts/git-commit/], so you may be familiar with them.
+and [other great articles](https://chris.beams.io/posts/git-commit/), so you may be familiar with them.
 
 
 ## Subject Lines
