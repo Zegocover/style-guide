@@ -20,7 +20,7 @@ const MyComponent = () => {
 
   return (
     <>
-      {data && <p>Result: {result}</p>}
+      {result && <p>Result: {result}</p>}
       <Button loading={loading} onClick={runTask}>
         Click Me
       </Button>
@@ -41,7 +41,7 @@ const MyComponent = () => {
 
   return (
     <>
-      {data && <p>Result: {result}</p>}
+      {result && <p>Result: {result}</p>}
       <Button
         loading={loading}
         onClick={() => runTask({ onComplete: myHandler })}
@@ -59,16 +59,19 @@ Now the useEffect version:
 const MyComponent = () => {
   const [runTask, { result, loading }] = useMyAsyncTask();
 
+  // usePrevious isn't a core hook, but an implementation is in the React docs
+  const prevResult = usePrevious(result);
+
   // If result has changed from the previous render AND it's not null/undefined, do the thing
   useEffect(() => {
-    if (result) {
+    if (result && result !== prevResult) {
       // do something
     }
-  }, [result]);
+  }, [result, prevResult]);
 
   return (
     <>
-      {data && <p>Result: {result}</p>}
+      {result && <p>Result: {result}</p>}
       <Button loading={loading} onClick={runTask}>
         Click Me
       </Button>
@@ -89,7 +92,7 @@ const MyComponent = () => {
   const [runTask, { loading }] = useMyAsyncTask();
 
   const myHandler = data => {
-    navigation.push('./success/');
+    navigation.push("./success/");
   };
 
   return (
@@ -110,11 +113,13 @@ const MyComponent = () => {
   const navigation = useNavigation(); // hypothetical
   const [runTask, { result, loading }] = useMyAsyncTask();
 
+  const prevResult = usePrevious(result);
+
   useEffect(() => {
-    if (result) {
-      navigation.push('./success/');
+    if (result && result !== prevResult) {
+      navigation.push("./success/");
     }
-  }, [result]);
+  }, [result, prevResult, navigation.push]);
 
   return (
     <Button loading={loading} onClick={runTask}>
@@ -132,7 +137,6 @@ What if we want to trigger a callback handler that's been provided by a parent c
 
 ```javascript
 const MyComponent = ({ onSuccess }) => {
-  const navigation = useNavigation(); // hypothetical
   const [runTask, { loading }] = useMyAsyncTask();
 
   // Here, when onSuccess is called, it'll be the version of the function
@@ -153,16 +157,17 @@ Here we have the same problem as before. If the parent has been unmounted (and b
 
 ```javascript
 const MyComponent = ({onSuccess}) => {
-  const navigation = useNavigation(); // hypothetical
   const [runTask, { result, loading }] = useMyAsyncTask();
 
+  const prevResult = usePrevious(result);
+
   useEffect(() => {
-    if (result) {
+    if (result && result !== prevResult) {
       // onSuccess is guaranteed to be fine, because it's the version
-      of the function from the _current_ render.
+      // of the function from the _current_ render.
       onSuccess(result);
     }
-  }, [result]);
+  }, [result, prevResult, onSuccess]);
 
   return (
       <Button
@@ -175,6 +180,39 @@ const MyComponent = ({onSuccess}) => {
 };
 ```
 
-So is it always preferable to use the useEffect approach instead of an onComplete callback? Not necessarily, if you want something to happen that doesn't care about the state of the component tree at the moment it triggered, it's probably need to use a callback. An example of this might be analytics tracking or triggering some kind of global notification or state update) where you can be relatively confident it'll always work. But if you're calling a function provided as a prop, there's no way to guarantee that it's safe to call asynchronously, if you want to be certain that you're avoiding bugs, useEffect is the way to go.
+So is it always preferable to use the useEffect approach instead of an onComplete callback? Not necessarily, if you want something to happen that doesn't care about the state of the component tree at the moment it triggered, it's probably appropriate to use a callback. An example of this might be analytics tracking or triggering some kind of global notification or state update) where you can be relatively confident it'll always work. But if you're calling a function provided as a prop, there's no way to guarantee that it's safe to call asynchronously, if you want to be certain that you're avoiding bugs, useEffect is the way to go.
 
 The rule of thumb should be to handle the result of async tasks in `useEffect`, breaking the rule only in circumstances where you're sure it's okay to do so.
+
+Here's an example that uses both approaches in a way that follows these rules.
+
+```javascript
+const MyComponent = () => {
+  const navigation = useNavigation();
+  const trackEvent = useTracking();
+  const [runTask, { result, loading }] = useMyAsyncTask();
+
+  const prevResult = usePrevious(result);
+
+  useEffect(() => {
+    if (result && result !== prevResult) {
+      navigation.push("./success/");
+    }
+  }, [result, prevResult, navigation.push]);
+
+  const onComplete = result => {
+    // trackEvent might depend on context behind the scenes,
+    // but we've decided it's safe to use outside of the component
+    // lifecycle. Use your own judgement here.
+    trackEvent("Foo Completed", result);
+  };
+
+  return (
+    <Button loading={loading} onClick={() => runTask({ onComplete })}>
+      Click Me
+    </Button>
+  );
+};
+```
+
+In reality you might also use `useCallback` to optimize things a bit, but this is the basic pattern.
