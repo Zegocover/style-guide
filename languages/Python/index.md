@@ -98,7 +98,7 @@ Where the standard Django app modules `models.py`, `forms.py`, `admin.py`, etc g
 
 We run `flake8` over python code before tests during our continuous integration suite of checks. Only relatively serious issues, such as undeclared locals, missing imports, mutable defaults, or remaining breakpoints will fail the build.
 
-There's no particular need to mention these in code review, as developers need to pass both CI checks amd code review before merging.
+There's no particular need to mention these in code review, as developers need to pass both CI checks and code review before merging.
 
 ### In code review
 
