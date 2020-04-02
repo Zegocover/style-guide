@@ -20,6 +20,12 @@ There are a fair number of articles that explain why sequential ids might be an 
 Don't:
 ```python
 class Entity(models.Model):
+    # Django adds a sequential ID by default
+    ...
+```
+
+```python
+class Entity(models.Model):
     id = models.AutoField(primary_key=True)
 ```
 
