@@ -14,7 +14,7 @@ There are a fair number of articles that explain why sequential ids might be an 
 
 ###### Why:
 - Avoids information disclosure
-- Stops entity enumeration
+- Stops entity enumeration -> [IDOR](https://medium.com/@woj_ciech/explaining-idor-in-almost-real-life-scenario-in-bug-bounty-program-c214008f8378)
 - Less prone to mistakes while querying DB
 
 Don't:
