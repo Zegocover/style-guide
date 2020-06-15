@@ -93,6 +93,17 @@ Note that in the context of a Django request the log formatter will automaticall
 
 Processing and storing logs costs money, and the costs from excessive logging add up fairly quickly, so only log at `INFO` level or above if the event is something we're likely to want to know about when troubleshooting (errors, warnings, state changes). If you do want more detailed logging then do it at `DEBUG` level which is not processed by default, but is stored and can be retrieved if necessary. As a rough guide, if you can't link the log to a key identifier such as customer number or policy number then it should probably either be at `DEBUG` level or a metric instead of a log.
 
+```python
+# bad
+logger.info("Retrieved %d records", len(records))
+
+# ok
+logger.debug("Retrieved %d records", len(records))
+
+# good
+statsd.increment("records_retrieved", len(records))
+```
+
 Loggers should be declared at the module level as `logger = logging.getLogger(__name__)`.
 
 Log messages should use `%`-style format strings and should not pre-format the message: allow the logger to do the formatting. This helps group log messages correctly when sent to Sentry, and allows formatting to be skipped when loggers are disabled. Note, however, that you probably shouldn't need to do much or any formatting with structured logging.
