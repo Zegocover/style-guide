@@ -79,15 +79,18 @@ Treat logs as event streams. We use structured logging to make log events querya
 
 ```python
 # bad
-logger.info("Auto-renewed policy for customer %s", customer.customer_number)
+logger.info("Renewed policy for customer %s", customer.customer_number)
 
 # good
-logger.info("Auto-renewed policy", extra={
-    "usr.id": customer.customer_number,
-    "evt.name": "policy_auto_renewal",
+logger.info("Renewed policy", extra={
+    "usr.id": current_user.customer_number,
+    "customer.id": customer.customer_number,
+    "evt.name": "policy_renewal",
     "evt.outcome": "renewed"
 })
 ```
+
+The `usr.id` attribute should be used for the currently authenticated user, whereas `customer.id` should be used for the customer concerned. For requests made by the customer themselves these will be the same; for requests from the admin site they will be different as `usr.id` should be the admin user.
 
 Note that in the context of a Django request the log formatter will automatically add safe details of the HTTP request and the authenticated user, and in a Celery task it will add the task name and identifier.
 
