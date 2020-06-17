@@ -79,19 +79,28 @@ Treat logs as event streams. We use structured logging to make log events querya
 
 ```python
 # bad
-logger.info("Auto-renewed policy for customer %s", customer.customer_number)
+logger.info("Renewed policy for customer %s", customer.customer_number)
 
 # good
-logger.info("Auto-renewed policy", extra={
-    "usr.id": customer.customer_number,
-    "evt.name": "policy_auto_renewal",
+logger.info("Renewed policy", extra={
+    "usr.id": current_user.customer_number,
+    "customer.id": customer.customer_number,
+    "evt.name": "policy_renewal",
     "evt.outcome": "renewed"
 })
 ```
 
-Note that in the context of a Django request the log formatter will automatically add safe details of the HTTP request and the authenticated user, and in a Celery task it will add the task name and identifier.
+The `usr.id` attribute should be used for the currently authenticated user, whereas `customer.id` should be used for the customer concerned. For requests made by the customer themselves these will be the same; for requests from the admin site they will be different as `usr.id` should be the admin user. Note that in the context of a Django request the log formatter will automatically add details of the HTTP request and the authenticated user, and in a Celery task it will add the task name and identifier.
 
-Processing and storing logs costs money, and the costs from excessive logging add up fairly quickly, so only log at `INFO` level or above if the event is something we're likely to want to know about when troubleshooting (errors, warnings, state changes). If you do want more detailed logging then do it at `DEBUG` level which is not processed by default, but is stored and can be retrieved if necessary. As a rough guide, if you can't link the log to a key identifier such as customer number or policy number then it should probably either be at `DEBUG` level or a metric instead of a log.
+Processing and storing logs costs money, and the costs from excessive logging add up fairly quickly, so only log at `INFO` level or above if the event is something we're likely to want to know about when troubleshooting. Great places to add logging are for errors, warnings, and interesting events, e.g.
+
+- State changes, such as renewing or adjusting a policy
+- Security-related events such as authenticating or logging out
+- Third-party calls such as taking payment or querying claims data
+
+The goal is that when we need to investigate things that have gone wrong we can see a timeline of all the key events leading up to it, regardless of which service the events originated from.
+
+If you do want more detailed logging for specific situations then do it at `DEBUG` level which is not processed by default, but is stored and can be retrieved if necessary. As a rough guide, if you can't link the log to a key identifier such as customer number or policy number then it should probably either be at `DEBUG` level or a metric instead of a log.
 
 ```python
 # bad
@@ -104,7 +113,7 @@ logger.debug("Retrieved %d records", len(records))
 statsd.increment("records_retrieved", len(records))
 ```
 
-Loggers should be declared at the module level as `logger = logging.getLogger(__name__)`.
+Loggers should be declared at the module level as `logger = logging.getLogger(__name__)`. The logger name can be used to filter logs and customise how they are handled.
 
 Log messages should use `%`-style format strings and should not pre-format the message: allow the logger to do the formatting. This helps group log messages correctly when sent to Sentry, and allows formatting to be skipped when loggers are disabled. Note, however, that you probably shouldn't need to do much or any formatting with structured logging.
 
