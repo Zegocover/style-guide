@@ -156,4 +156,26 @@ class Entity(models.Model):
 ```
 
 
+### Avoid auto_now_add=True
+Django provides an `auto_now_add` option for `DateField` and `DateTimeField`. By setting this field, Django implicitly marks the field as not editable and any attempts to write to it will silently fail.
 
+##### Why:
+- As the field is marked as not editable, this means that it isn't editable in your tests, either. `auto_now_add=True` means that Django will silently ignore any attempts to make a change to that field, regardless of whether the entity attempting to make the change is your code, your test's setup phase, or even a factory attempting to set a default datetime.
+
+
+Don't:
+```python
+class Snake(models.Model):
+    sighted_at = models.DateTimeField(auto_now_add=True)
+```
+
+Do:
+```python
+class Snake(models.Model):
+    sighted_at = models.DateTimeField(default=timezone.now)
+```
+
+```python
+class Snake(models.Model):
+    sighted_at = models.DateTimeField(default=tz_now)
+```
