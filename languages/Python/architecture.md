@@ -132,7 +132,7 @@ In this case either approach seems reasonable, because no properties of the `Pro
 ### Use UUID instead of sequential IDs
 There are a fair number of articles that explain why sequential ids might be an issue but, to summarise:
 
-###### Why:
+#### Why:
 - Avoids information disclosure
 - Stops entity enumeration -> [IDOR](https://medium.com/@woj_ciech/explaining-idor-in-almost-real-life-scenario-in-bug-bounty-program-c214008f8378)
 - Less prone to mistakes while querying DB
@@ -155,5 +155,15 @@ class Entity(models.Model):
     id = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False)
 ```
 
+### Add `created_at` and `updated_at` (optional) to new models
+There are a number of models without created or updated timestamps. Those models with the fields lack consistenency in naming. At the very least the model must have a `created_at` field. If the model is never updated, which you should strive for, then the `updated_at` is optional.
 
+#### Why:
+- Makes it clear when these entities were created and when they were last updated. This can be essential in tracking down issues.
 
+```python
+class Entity(models.Model)
+    id = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False)
+    created_at = models.DateTimeField(auto_now_add=True)
+    updated_at = models.DateTimeField(auto_now=True)
+```
