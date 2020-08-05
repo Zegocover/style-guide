@@ -132,6 +132,8 @@ Models, Enum classes and apps should have singular names.
 
 Avoid `select_related` with no parameters. It's performance characteristics can change wildly as the data model evolves.
 
+Transactions should be as short as possible, as open transactions have a performance cost for the database and we can only maintain a certain number of open transactions at any one time. This means that you should prefer using `transaction.atomic` as a context manager (`with transaction.atomic()`) over as a decorator (`@transaction.atomic`), unless your function only does database access calls and you genuinely need transactional behaviour throughout. Avoid calling external services inside a transaction, as the round trip to and from the external service will cause your transaction to stay open for an artificially long time. 
+
 Where the standard Django app modules `models.py`, `forms.py`, `admin.py`, etc get too large to be workable, convert into a package containing multiple modules.
 
 
