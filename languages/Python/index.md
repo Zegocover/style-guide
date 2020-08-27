@@ -1,6 +1,6 @@
 # Python Style Guide
 
-Your goal is to write code that is clean, correct, secure, efficient, consistent, clear to read, beautiful, and easy to review. This needs conscious thought, time and effort to achieve. These guidelines are one of the tools you have to help with that goal.
+Your goal is to write code that is clean, correct, secure, efficient, consistent, clear to read, beautiful, and easy to review. ~~This needs conscious thought, time and effort to achieve~~ So we use [black](https://github.com/psf/black). These guidelines are one of the tools you have to help with that goal.
 
 These guidelines do not apply to any generated code, such as Django migrations.
 
