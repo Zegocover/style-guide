@@ -44,6 +44,10 @@ We are not currently enforcing any type linting, so type annotations are mostly 
 Docstrings are for explaining a purpose, API or contract – what it's for, what it does, how to call it, what to expect. `#` comments are for clarifying or explaining the implementation.
 
 
+### Migrating to Black
+
+As we are moving from a colourful world of competing auto-formatters and personal opinion to one where everything is black, Pull Requests should only contain linting/formatting changes to the files that also contain the logic/feature changes in the actual change. This makes reviewing the pull request much easier and avoid big bang changes to other parts of the code that aren't connected.
+
 ### Style
 
 We have no requirement to stay compatible with old versions of Python. Feel free to use, and expect to see, Python features introduced in the 3.x line such as [`f` strings](https://www.python.org/dev/peps/pep-0498/),  [`Path` objects](https://www.python.org/dev/peps/pep-0519/), [keyword-only arguments](https://www.python.org/dev/peps/pep-3102/), [function](https://www.python.org/dev/peps/pep-0484/) and [variable](https://www.python.org/dev/peps/pep-0526/) annotations, and (backported) [data classes](https://www.python.org/dev/peps/pep-0557/) where they are appropriate.
