@@ -1,6 +1,6 @@
 # Python Style Guide
 
-Your goal is to write code that is clean, correct, secure, efficient, consistent, clear to read, beautiful, and easy to review. This needs conscious thought, time and effort to achieve. These guidelines are one of the tools you have to help with that goal.
+Your goal is to write code that is clean, correct, secure, efficient, consistent, clear to read, beautiful, and easy to review. ~~This needs conscious thought, time and effort to achieve~~ So we use [black](https://github.com/psf/black). These guidelines are one of the tools you have to help with that goal.
 
 These guidelines do not apply to any generated code, such as Django migrations.
 
@@ -43,6 +43,10 @@ We are not currently enforcing any type linting, so type annotations are mostly 
 
 Docstrings are for explaining a purpose, API or contract – what it's for, what it does, how to call it, what to expect. `#` comments are for clarifying or explaining the implementation.
 
+
+### Migrating to Black
+
+As we are moving from a colourful world of competing auto-formatters and personal opinion to one where everything is black, Pull Requests should only contain linting/formatting changes to the files that also contain the logic/feature changes in the actual change. This makes reviewing the pull request much easier and avoid big bang changes to other parts of the code that aren't connected.
 
 ### Style
 
