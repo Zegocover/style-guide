@@ -127,6 +127,13 @@ class PolicyRenewals:
 
 In this case either approach seems reasonable, because no properties of the `Product` aggregate are used, and too many tiny domain services can hurt discoverability. However, if the method started getting more complex and using details of the product, or there were a set of related renewals methods, then it would make sense to extract them into a cohesive domain service.
 
+### Write simple tasks
+
+Where possible, tasks should be free of domain logic and should delegate any complexity to domain and application services. Tasks may be responsible for unpacking arguments, handling retries, reporting status and input validation.
+
+Long-running periodic tasks - particularly those that have a lot of interaction with our database and those that will grow in length as our database grows - should be avoided where there is no clear advantage. Prefer an event-based approach by dispatching a smaller task when an event of interest occurs.
+
+
 ## Django
 
 ### Use UUID instead of sequential IDs
@@ -154,6 +161,3 @@ Do:
 class Entity(models.Model):
     id = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False)
 ```
-
-
-
