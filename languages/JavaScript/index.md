@@ -6,6 +6,27 @@ This document doesn't cover purely preferential things that are already enforced
 
 ---
 
+## Migrating to TypeScript
+
+The current website frontend is mostly JavaScript but whenever possible, new files should be written in TypeScript.
+
+### Why TypeScript?
+
+Static type checking is a feature which allows teams to refactor and move quickly with confidence. It helps with onboarding new engineers, improves developer experience and is another layer of trust within the codebase.
+
+### The process of migration
+
+1. **New** files should created as TypeScript unless there is good reason not to.
+2. **Existing** files should only be updated if there is a dedicated refactor to do so or when they are updated as part of other work. If a file is touched and it's feasible to do so, it should be converted to TypeScript.
+
+### Escape hatches
+
+There are ways to avoid typechecking when using TypeScript such as `Any` and `@ts-ignore`. For incremental adoption, it's not a strict requirement to have everything strongly typed but it's encouraged. Loose types aren't trustworthy and can lead to a false sense of trust in the codebase. Use of `Any` should be avoided and `@ts-ignore` should be avoided unless there is no known type and it's not feasible to create one.
+
+### Getting Started with TypeScript
+
+It's quick to become productive in TypeScript, if you're unfamiliar with it then take a look at [TypeScript for JavaScript Programmers](https://www.typescriptlang.org/docs/handbook/typescript-in-5-minutes.html).
+
 ## Formatting and Syntax
 
 ### Naming
