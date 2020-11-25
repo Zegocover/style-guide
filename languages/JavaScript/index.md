@@ -16,7 +16,7 @@ Static type checking is a feature which allows teams to refactor and move quickl
 
 ### The process of migration
 
-1. **New** files should created as TypeScript unless there is good reason not to.
+1. **New** files should be created as TypeScript unless there is good reason not to.
 2. **Existing** files should only be updated if there is a dedicated refactor to do so or when they are updated as part of other work. If a file is touched and it's feasible to do so, it should be converted to TypeScript.
 
 ### Escape hatches
