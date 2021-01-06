@@ -27,6 +27,27 @@ There are ways to avoid typechecking when using TypeScript such as `Any` and `@t
 
 It's quick to become productive in TypeScript, if you're unfamiliar with it then take a look at [TypeScript for JavaScript Programmers](https://www.typescriptlang.org/docs/handbook/typescript-in-5-minutes.html).
 
+### How do I use a JS/JSX component in my TS file?
+
+There are two approaches to take during the transition from JavaScript to TypeScript as the primary development language.
+
+#### Ideal Solution
+
+If you have the time and the inclination, you could convert the component you're importing into a TS file and add types. When doing this as part of related work, it's best to create an additional PR to make it easier for reviewers to digest.
+**If you don't have time or it's out of scope, take the practical approach.**
+
+#### Practical Solution
+
+A quick fix is to add a `/* @ts-ignore */` directive above the component usage like so (assumes `PrimaryPrice` is a JS component):
+
+```jsx
+<Spacer height={unit(2)} mobileHeight={unit(3)} />
+{/* @ts-ignore */}
+<PrimaryPrice price={price} />
+```
+
+This approach is preferred when it's not feasible to change the components you're importing. When a component fincally makes the transition to TS, any `/* @ts-ignore */` directives should be removed where this new TS component is referenced.
+
 ## Formatting and Syntax
 
 ### Naming
