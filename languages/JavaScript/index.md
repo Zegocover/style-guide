@@ -33,7 +33,7 @@ There are two approaches to take during the transition from JavaScript to TypeSc
 
 #### Ideal Solution
 
-If you have the time and the inclination, you could convert the component you're importing into a TS file and add types. When doing this as part of related work, it's best to create an additional PR to make it easier for reviewers to digest.
+If you have the time and the inclination, you could convert the component you're importing into a TS file and add types. When doing this as part of related work, it's best to create an additional PR to make it easier for reviewers to digest. With small component changes or atom components, a separate commit should suffice.
 **If you don't have time or it's out of scope, take the practical approach.**
 
 #### Practical Solution
