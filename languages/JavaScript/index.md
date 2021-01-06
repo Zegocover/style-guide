@@ -46,7 +46,7 @@ A quick fix is to add a `/* @ts-ignore */` directive above the component usage l
 <PrimaryPrice price={price} />
 ```
 
-This approach is preferred when it's not feasible to change the components you're importing. When a component fincally makes the transition to TS, any `/* @ts-ignore */` directives should be removed where this new TS component is referenced.
+This approach is preferred when it's not feasible to change the components you're importing. When a component finally makes the transition to TS, any `/* @ts-ignore */` directives should be removed where this new TS component is referenced.
 
 ## Formatting and Syntax
 
