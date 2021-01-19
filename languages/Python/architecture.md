@@ -155,5 +155,23 @@ class Entity(models.Model):
     id = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False)
 ```
 
+### Capture model-specific collections in custom QuerySet functions
+Where we can, we should avoid leaking the implementation detail of our individual models. Leaking implementation details makes the model more difficult to change (in part due to the need to change any direct field references), and results the same concept being implemented several different times in several different ways.
 
+While Django's powerful ORM makes it very easy to build very specific `SELECT`-style queries, `.filter()` and `.get()` require you to know exactly which fields you need to examine, which results in leaking implementation detail.
 
+###### How:
+```python
+class PlantQuerySet(models.QuerySet):
+    def cacti(self):
+        return self.filter(planttype__family='cactaceae')
+
+    def with_spikes(self):
+        return self.filter(has_spikes=True)
+```
+
+Putting these on the queryset, in addition to the lazy-evaluating nature of querysets, allows us to chain these functions to build the same kind of querysets that `filter()` or `get()` will produce, but without exposing the inner workings of the `Plant` class to anywhere else.
+
+```python
+cacti_with_spikes = Plant.objects.get_queryset().cacti().with_spikes()
+```
