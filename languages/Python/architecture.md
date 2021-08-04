@@ -155,5 +155,20 @@ class Entity(models.Model):
     id = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False)
 ```
 
+### Use of signals should be considered an anti-pattern
 
+The use of signals can make it very difficult to reason about the code especially when they produce side-effects. Signals should only be used in very limited cases and most times shouldn't be used at all. Signals don't offer any advantages since they're executed synchronously. 
+
+Keep the business logic out of the models and instead use service classes with well defined API's which encapsulate functionality. [Refer to Encapsulate domain logic in methods](#encapsulate-domain-logic-in-methods)
+
+#### Don't
+Use signals decouple code or have code run as a side-effects. They can fail and you may never know. They're also hard to test for and have no consistent order.
+
+#### Do
+Use they for very limited purposes. Better to not use them at all.
+
+### Large migrations
+At times we'll need to do updates to large tables and if we try to them all in one go we can bring down the whole site. In order to do this safely the migration should be broken down into multiple steps.
+* Add new field
+* Set default to value through code
 
