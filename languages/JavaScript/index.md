@@ -29,14 +29,45 @@ It's quick to become productive in TypeScript, if you're unfamiliar with it then
 
 ### How do I use a JS/JSX component in my TS file?
 
-There are two approaches to take during the transition from JavaScript to TypeScript as the primary development language.
+There are a few approaches to take during the transition from JavaScript to TypeScript as the primary development language.
 
-#### Ideal Solution
+#### Full conversion to TypeScript
 
 If you have the time and the inclination, you could convert the component you're importing into a TS file and add types. When doing this as part of related work, it's best to create an additional PR to make it easier for reviewers to digest. With small component changes or atom components, a separate commit should suffice.
-**If you don't have time or it's out of scope, take the practical approach.**
+**If you don't have time or it's out of scope, take another approach.**
 
-#### Practical Solution
+#### Annotate with JSDoc
+
+Most JavaScript can be upgraded to have types in a fairly risk-free way by adding a comment above in the form of [JSDoc] annotations.
+
+  [JSDoc]: https://jsdoc.app
+
+You can play around with this example below in the [TypeScript Playground][TSPex1].
+
+```javascript
+/**
+ * @param {Object} props
+ * @param {string} props.str
+ * @param {number} props.num
+ * @param {boolean} props.bool
+ * @param {string} [props.optionalStr]
+ */
+export default function Component (props) {
+  const { str, num, bool, optionalStr } = props;
+  if (!bool) return null;
+  return (
+    <ul>
+      <li>str: {str}</li>
+      <li>num: {num}</li>
+      {optionalStr != null && <li>optionalStr: {optionalStr}</li>}
+    </ul>
+  );
+}
+```
+
+  [TSPex1]: https://www.typescriptlang.org/play?filetype=js#code/JYWwDg9gTgLgBAJQKYEMDG8BmUIjgcilQ3wG4BYAKCoHoAqOquOuAFQAtgBnONXSAHZIB8ACYQkPABpMWsuAAEwKKCjwBvAPIAjAFZIMAXzhgcYLvKUq1cdVxhRgAgObHTEcwDp7UOAFo4FDhRSTRHMBhgCAE4CEw4GHYkOB8TM0tlVQ0BAFcQbSQoNzMuT1y8AKCQrjDgCKiYuISkuHK0jwzrDW0ICAAbVAFij1Ke-v9A4NDwyOjY+MTksb72sE6s2x8nVzgAbXcvD1mBFD6AZQcAXQmJqum64-nm5KOG04vfA-lLIhgcqAEPHUACkzlJPABRAYgYQwQyyGhUJAAD0gsCmmBQOT6WByAgwDTgAGF+NFYXAABQHLgASlsTF40XsthSDgANK08hzlhzXtF3g44MYALyrLgUShwODAeIUgCEyzpv3+MVyfT6EqlyoBlIZUoAPNiAHx6qVwfV9YBGnwALk2DkM+polpNkrNBpd5Tt6nKjudVtNUvUfJO50FctFapWADJo+aXSGBVBvYmw0UnS74W6DTRjQyaRKs1RMHiCXMiSguEgpBS6epTdqYhTA2aaDQ4JjgH0eAU0Fiq3AiABHHLAIiiMVwdgoABuSyQwjgA0w8DimBbBpJ4DJIjgNFd7ppVCLlBL+MeFarAE1a-Ts4OkH8dc37+62x2UF2ewZ+8lqYEiGlfFoCIDAEgATzASQN3NLdBFhGCpR8YV1AARizd1MM5EBhQAIkwXpcMQuBlhQgAWAAmDCsL3A8zSPSgTzPMsYkvJAAC1b3re9G11V9W3bAQIDgQocCgUpWggAB3BIoHAqdgBgSIXBEkRCkCFd1IAA2WLTAgEUQYPfRZWIcPo-DOZQ0GSGBhL4cABhgZItNTD4tJg-U4J3GBiOQ3CfCI-j3XKFDUIogBmaiaJI3o+iMuipQYwwgA
+
+#### Escape hatch solution
 
 A quick fix is to add a `/* @ts-ignore */` directive above the component usage like so (assumes `PrimaryPrice` is a JS component):
 
