@@ -19,10 +19,6 @@ Static type checking is a feature which allows teams to refactor and move quickl
 1. **New** files should be created as TypeScript unless there is good reason not to.
 2. **Existing** files should only be updated if there is a dedicated refactor to do so or when they are updated as part of other work. If a file is touched and it's feasible to do so, it should be converted to TypeScript.
 
-### Escape hatches
-
-There are ways to avoid typechecking when using TypeScript such as `Any` and `@ts-ignore`. For incremental adoption, it's not a strict requirement to have everything strongly typed but it's encouraged. Loose types aren't trustworthy and can lead to a false sense of trust in the codebase. Use of `Any` should be avoided and `@ts-ignore` should be avoided unless there is no known type and it's not feasible to create one.
-
 ### Getting Started with TypeScript
 
 It's quick to become productive in TypeScript, if you're unfamiliar with it then take a look at [TypeScript for JavaScript Programmers](https://www.typescriptlang.org/docs/handbook/typescript-in-5-minutes.html).
@@ -69,15 +65,17 @@ export default function Component (props) {
 
 #### Escape hatch solution
 
-A quick fix is to add a `/* @ts-ignore */` directive above the component usage like so (assumes `PrimaryPrice` is a JS component):
+A quick fix is to add a `/* @ts-expect-error */` directive above the component usage like so (assumes `PrimaryPrice` is a JS component):
 
 ```jsx
 <Spacer height={unit(2)} mobileHeight={unit(3)} />
-{/* @ts-ignore */}
+{/* @ts-expect-error: PrimaryPrice is lacking proper type information */}
 <PrimaryPrice price={price} />
 ```
 
-This approach is preferred when it's not feasible to change the components you're importing. When a component finally makes the transition to TS, any `/* @ts-ignore */` directives should be removed where this new TS component is referenced.
+This approach is preferred when it's not feasible to change the components you're importing. When a component finally makes the transition to TS, any `/* @ts-expect-error */` directives should be removed where this new TS component is referenced. This should be easy to pick up as `/* @ts-expect-error */` directives will throw compilation errors if unused.
+
+Please do not use `/* @ts-ignore */` directives as fixed issues can go hidden by this directive and then later introduce a different problem that we missed.
 
 ## Formatting and Syntax
 
